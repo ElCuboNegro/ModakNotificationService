@@ -1,0 +1,29 @@
+# ============================================================================
+# PYTHON PACKAGE REQUIREMENTS: docs
+# ============================================================================
+# REQUIRES: Python >= 3
+# DESCRIPTION:
+#    pip install -r py.requirements/docs.txt
+#
+# SEE ALSO:
+#  * http://packages.python.org/sphinxcontrib-programoutput/
+#  * NEW-REPO: https://github.com/NextThought/sphinxcontrib-programoutput
+#  * NEW-REPO: https://github.com/lipro/sphinxcontrib-ansi
+# ============================================================================
+
+# -- BEHAVE-RELATED:
+-r basic.txt
+
+# -- DOCUMENTATION:
+# NOTE: sphinxcontrib-programoutput and sphinxcontrib-ansi 
+#   sphinxcontrib-programoutput: < 0.10.0 (ansi-support was removed)
+
+sphinx >=2.0
+sphinx-autobuild
+sphinx_bootstrap_theme >= 0.6.0
+
+sphinxcontrib-programoutput >=0.8,<0.10.0
+git+https://github.com/jenisys/sphinxcontrib-ansi.git@JE_v0.7.0
+
+# -- OPTIONAL DOCUMENTATION: If PDF docs are needed.
+# rst2pdf

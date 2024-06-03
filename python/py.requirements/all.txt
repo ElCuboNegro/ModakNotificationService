@@ -1,0 +1,15 @@
+# ============================================================================
+# modaknotificationservice: PYTHON PACKAGE REQUIREMENTS: All requirements
+# ============================================================================
+# DESCRIPTION:
+#    pip install -r py.requirements/all.txt
+#
+# SEE ALSO:
+#  * https://pip.pypa.io/en/stable/user_guide/
+# ============================================================================
+# ALREADY: -r testing.txt
+# ALREADY: -r docs.txt
+
+-r basic.txt
+-r develop.txt
+-r testing.txt

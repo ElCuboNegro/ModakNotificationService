@@ -1,0 +1,20 @@
+# ============================================================================
+# PYTHON PACKAGE REQUIREMENTS: modaknotificationservice
+# ============================================================================
+# REQUIRES: Python >= 3
+# DESCRIPTION:
+#    pip install -r py.requirements/testing.txt
+# ============================================================================
+
+-r basic.txt
+
+# -- BEHAVE-RELATED:
+# behave >= 1.2.6
+git+https://github.com/behave/behave.git@v1.2.7.dev1
+
+# -- TESTING: Unit tests.
+# PREPARED-FUTURE: behave4cmd0, behave4cmd
+pytest >= 5.0; python_version >= '3.0'
+
+mock  >= 4.0;   python_version >= '3.6'
+assertpy >= 1.1

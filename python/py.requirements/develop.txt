@@ -1,0 +1,23 @@
+# ============================================================================
+# PYTHON PACKAGE REQUIREMENTS: develop
+# ============================================================================
+# REQUIRES: Python >= 3
+# DESCRIPTION:
+#    pip install -r py.requirements/develop.txt
+# ============================================================================
+
+# -- BUILD-SUPPORT: invoke >= 1.2.0
+-r ../tasks/py.requirements.txt
+
+tox >= 3.10.0
+pylint
+twine
+modernize
+
+# -- DISABLED:
+# watchdog >= 0.6.0
+
+# -- DEPENDS ON:
+-r basic.txt
+-r docs.txt
+-r testing.txt
