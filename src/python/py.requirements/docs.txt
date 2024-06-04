@@ -15,7 +15,7 @@
 -r basic.txt
 
 # -- DOCUMENTATION:
-# NOTE: sphinxcontrib-programoutput and sphinxcontrib-ansi 
+# NOTE: sphinxcontrib-programoutput and sphinxcontrib-ansi
 #   sphinxcontrib-programoutput: < 0.10.0 (ansi-support was removed)
 
 sphinx >=2.0

@@ -1,10 +1,8 @@
 # Servicio de Notificación de Tarifa Limitada
 
-Hola! Soy Juan Jose, y esta es mi prueba técnica para Senior Backend Engineer en Modak.
+¡Hola! Soy Juan José, y esta es mi prueba técnica para el puesto de Senior Backend Engineer en Modak.
 
-En el presente proyecto, encontrarán dos versiones del mismo servicio, desarrolladas independientemente en Python y Go. 
-Aunque no soy un experto en Go y lo estoy aprendiendo mediante este mini proyecto, daré lo mejor de mí para demostrar mi 
-flujo de trabajo y experiencia en desarrollo.
+En este proyecto, encontrarán dos versiones del mismo servicio, desarrolladas independientemente en Python y Go. Aunque no soy un experto en Go y lo estoy aprendiendo mediante este mini proyecto, daré lo mejor de mí para demostrar mi flujo de trabajo y experiencia en desarrollo.
 
 ## Metodología
 
@@ -26,24 +24,42 @@ Cada una de estas carpetas contiene el código fuente correspondiente, así como
 
 ## Ejecución del Proyecto
 
-Para la ejecucion del proyecto es necesario instalar `pre-commit` por lo que es necesario, para cualquiera de los dos entornos, tener Python 3.x instalado.
+Para la ejecución del proyecto es necesario instalar `pre-commit` [https://pre-commit.com/], y `golangci-lint` [https://github.com/golangci/golangci-lint]. Para ahorrar costos, el CI se ejecuta en instancias pre-commit, intentando evitar la pérdida de tiempo de ejecución dentro de GitHub Actions.
 
-una vez instalado python, y clonado el presente repo, ejecute:
+Una vez instalado Python y clonado el presente repositorio, ejecute:
 
-- `pip install pre-commit`
+```bash
+pip install pre-commit
+```
 
-En caso de usar MacOS y tener Homebrew, puede instalarlo mediante 
-- `brew install pre-commit`
+En caso de usar MacOS y tener Homebrew, puede instalarlo mediante:
+```bash
+brew install pre-commit
+```
+
+Luego, ya en el folder del proyecto, (Y CADA VEZ QUE EL PROYECTO SE CLONE) ejecute:
+```bash
+pre-commit install
+```
+
 
 ### Python
 
-# -- Paso 1: Crea y activa el virtual python environment.
-$ virtualenv --python python3 .venv
-$ source .venv/bin/activate
+1. **Crea y activa el entorno virtual de Python:**
 
-# -- En WINDOWS:
-# call .venv/Scripts/activate
+    ```bash
+    virtualenv --python python3 .venv
+    source .venv/bin/activate
+    ```
 
-# -- Paso 2: Instala los paquetes requeridos con pip.
-$ pip install -r py.requirements/all.txt
+    En Windows:
 
+    ```bash
+    call .venv/Scripts/activate
+    ```
+
+2. **Instala los paquetes requeridos con pip:**
+
+    ```bash
+    pip install -r py.requirements/all.txt
+    ```

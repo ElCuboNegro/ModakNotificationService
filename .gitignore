@@ -7,6 +7,10 @@
 *.dll
 *.so
 *.dylib
+*.egg-info
+
+# .git
+.git
 
 # Test binary, built with `go test -c`
 *.test
@@ -20,3 +24,6 @@
 # Go workspace file
 go.work
 go.work.sum
+
+# python cache
+__pycache__/

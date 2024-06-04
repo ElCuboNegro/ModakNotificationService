@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0  # Updated to the latest stable version
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2  # Updated to the latest stable version
+    hooks:
+      - id: black
+        language_version: python3.10
+        args: ['-l', '80', '--check', '--diff']
+        files: src/python/  # Ensure Black only checks the Python source directory
+
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.59.0
+    hooks:
+      - id: golangci-lint
+        args: ['run', './src/go/', --help]  # Corrected the config path
