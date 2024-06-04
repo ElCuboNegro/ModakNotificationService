@@ -3,17 +3,17 @@
 # ============================================================================
 # REQUIRES: Python >= 3
 # DESCRIPTION:
-#    pip install -r py.requirements/testing.txt
+#    pip install -r ./src/python/py.requirements/testing.txt
 # ============================================================================
 
--r basic.txt
+-r ./src/python/py.requirements/basic.txt
+assertpy >= 1.1
 
 # -- BEHAVE-RELATED:
 
-behave
+behave==1.2.6
+mock  >= 4.0
 
 # -- TESTING: Unit tests.
 # PREPARED-FUTURE: behave4cmd0, behave4cmd
-pytest >= 5.0;
-mock  >= 4.0;
-assertpy >= 1.1
+pytest >= 5.0

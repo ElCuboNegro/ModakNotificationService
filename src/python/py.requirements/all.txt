@@ -7,9 +7,9 @@
 # SEE ALSO:
 #  * https://pip.pypa.io/en/stable/user_guide/
 # ============================================================================
-# ALREADY: -r testing.txt
-# ALREADY: -r docs.txt
+# ALREADY: -r ./src/python/py.requirements/testing.txt
+# ALREADY: -r ./src/python/py.requirements/docs.txt
 
--r basic.txt
--r develop.txt
--r testing.txt
+-r ./src/python/py.requirements/basic.txt
+-r ./src/python/py.requirements/develop.txt
+-r ./src/python/py.requirements/testing.txt

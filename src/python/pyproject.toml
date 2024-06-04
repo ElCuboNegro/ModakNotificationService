@@ -1,0 +1,50 @@
+[tool.importlinter]
+root_package = "./src/python:main"
+
+[[tool.importlinter.contracts]]
+name = "CLI > Context > Library, Runner > Extras > IO & Pipeline"
+type = "layers"
+containers = "kedro"
+layers = [
+    "framework.cli",
+]
+ignore_imports = [
+    "kedro.runner.parallel_runner -> kedro.framework.project",
+    "kedro.framework.hooks.specs -> kedro.framework.context"
+]
+
+[[tool.importlinter.contracts]]
+name = "Pipeline and IO are independent"
+type = "independence"
+modules = [
+    "kedro.pipeline",
+    "kedro.io"
+]
+
+[[tool.importlinter.contracts]]
+name = "Config cannot import Runner et al"
+type = "forbidden"
+source_modules = [
+    "kedro.config"
+]
+forbidden_modules = [
+    "kedro.runner",
+    "kedro.io",
+    "kedro.pipeline",
+]
+
+[[tool.importlinter.contracts]]
+name = "Runner et al cannot import Config"
+type = "forbidden"
+source_modules = [
+    "kedro.runner",
+    "kedro.io",
+    "kedro.pipeline",
+]
+forbidden_modules = [
+    "kedro.config"
+]
+ignore_imports = [
+    "kedro.framework.context.context -> kedro.config",
+    "kedro.framework.session.session -> kedro.config"
+]

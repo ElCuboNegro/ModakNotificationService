@@ -84,9 +84,10 @@ def go_benchmark_project():
     subprocess.run(['go', 'test', '-v', '-bench=.'])
 
 def go_build_project():
-    """Build the Go project."""
-    print("Building the Go project...")
-    subprocess.run(['go', 'build', '-v'])
+    """Run the 'go mod tidy' command in the './src/go/...' folder."""
+    go_src_path = './src/go/...'
+    print(f"Running go mod tidy in {go_src_path}...")
+    subprocess.run(['go', 'mod', 'tidy'], cwd=go_src_path, check=True)
 
 def go_clean_project():
     """Clean the Go project."""
@@ -365,9 +366,10 @@ def run_command_for_python(command):
         python_clean_project()
 
 def run_go_mod_tidy():
-    """Run the 'go mod tidy' command."""
-    print("Running go mod tidy...")
-    subprocess.run(['go', 'mod', 'tidy'])
+    """Run the 'go mod tidy' command in the './src/go/...' folder."""
+    go_src_path = './src/go/...'
+    print(f"Running go mod tidy in {go_src_path}...")
+    subprocess.run(['go', 'mod', 'tidy'], cwd=go_src_path, check=True)
 
 def run_pre_commit(test_type):
     """Run pre-commit tests based on the specified type.

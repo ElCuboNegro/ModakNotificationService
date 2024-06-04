@@ -5,7 +5,6 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml # Checks yaml files for parseable syntax.
-        exclude: "^kedro/templates/|^features/steps/test_starter/"
       - id: check-json # Checks json files for parseable syntax.
       - id: check-added-large-files
       - id: check-case-conflict # Check for files that would conflict in case-insensitive filesystems
@@ -24,7 +23,17 @@ repos:
   - repo: local
     hooks:
       - id: go_mod_tidy
-        name: Go Mod Tidy
-        entry: bash -c 'cd src/go && go mod tidy'
-        language: system
+        name: "Go Mod Tidy"
+        entry: >
+          python -c "import subprocess; subprocess.run(['go', 'mod', 'tidy'], cwd='src/go')"
+        language: python
         types: [go]
+
+  - repo: local
+    hooks:
+      - id: imports
+        name: "Import Linter"
+        entry: >
+          python -c "import subprocess; subprocess.run(['lint-imports'], cwd='src/python')"
+        language: python
+        types: [python]

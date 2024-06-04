@@ -6,13 +6,15 @@
 #    pip install -r src/python/py.requirements/develop.txt
 # ============================================================================
 
-tox >= 3.10.0
-pylint
-twine
-modernize
-black > 24.4
 
 # -- DEPENDS ON:
--r basic.txt
--r docs.txt
--r testing.txt
+-r ./src/python/py.requirements/basic.txt
+-r ./src/python/py.requirements/docs.txt
+-r ./src/python/py.requirements/testing.txt
+black > 24.4
+coverage[toml]
+import-linter==2.0
+modernize
+pylint
+tox >= 3.10.0
+twine
