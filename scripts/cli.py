@@ -4,31 +4,6 @@ import subprocess
 import sys
 import os
 
-def increment_moo_count():
-    home_dir = os.path.expanduser("~")
-    file_path = os.path.join(home_dir, ".moo")
-
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            count = int(file.read().strip())
-    else:
-        count = 0
-
-    count += 1
-
-    with open(file_path, "w") as file:
-        file.write(str(count))
-
-    return count
-
-def reset_moo_count():
-    print("A little cat has miau'd, the cow is afraid of the cat's super cuteness...")
-    home_dir = os.path.expanduser("~")
-    file_path = os.path.join(home_dir, ".moo")
-    with open(file_path, "w") as file:
-        file.write("0")
-    return 0
-
 programming_jokes = [
     "Why do programmers prefer dark mode? Because light attracts bugs.",
     "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?'",
@@ -63,115 +38,343 @@ human_error_jokes = [
     "Why did the user bring their computer to the dentist? Because it had Bluetooth issues.",
 ]
 
-def main():
-    parser = CustomArgumentParser(description="A CLI tool for the modak project. This program has supercow powers!")
-    subparsers = parser.add_subparsers(dest='command')
+def add_language_subparsers(subparsers, command, help_text):
+    """Add subparsers for different commands and languages.
 
-    # Subcommand for joke
-    subparsers.add_parser('joke', help='Print a programming joke')
+    Args:
+        subparsers (argparse._SubParsersAction): The subparsers action object.
+        command (str): The command to add a subparser for.
+        help_text (str): The help text for the command.
+    """
+    parser = subparsers.add_parser(command, help=help_text)
+    parser.add_argument('language', nargs='?', choices=['go', 'python'], help='Language to run the command for (go, python)')
 
-    # Subcommand for test
-    test_parser = subparsers.add_parser('test', help='Run tests')
-    test_parser.add_argument('test_type', nargs='?', choices=['go', 'python', '1', '2'], help='Type of tests to run (go, python, 1, or 2)')
+def benchmark_project():
+    """Run benchmarks for both Go and Python projects."""
+    go_benchmark_project()
+    python_benchmark_project()
 
-    # Subcommand for pre-commit
-    pre_commit_parser = subparsers.add_parser('pre-commit', help='Run pre-commit checks')
-    pre_commit_parser.add_argument('test_type', nargs='?', choices=['go', 'python', '1', '2'], help='Type of pre-commit checks to run (go, python, 1, or 2)')
+def build_docs():
+    """Build the project documentation."""
+    print("Building the documentation...")
+    # Aquí podrías añadir el comando para construir la documentación
 
-    # Subcommand for commit
-    commit_parser = subparsers.add_parser('commit', help='Make a git commit')
-    commit_parser.add_argument('message', help='Commit message')
+def build_project():
+    """Build both Go and Python projects."""
+    go_build_project()
+    python_build_project()
 
-    # Subcommand for push
-    push_parser = subparsers.add_parser('push', help='Push code to remote repository')
-    push_parser.add_argument('remote', help='Remote repository name')
-    push_parser.add_argument('branch', help='Branch name')
+def clean_project():
+    """Clean both Go and Python projects."""
+    go_clean_project()
+    python_clean_project()
 
-    # Subcommand for explain
-    explain_parser = subparsers.add_parser('explain', help='Explain code in a file')
-    explain_parser.add_argument('file', help='File to explain')
+def explain_code(file):
+    """Explain the code in the given file.
 
-    # Subcommand for build-docs
-    subparsers.add_parser('build-docs', help='Build the documentation')
+    Args:
+        file (str): The file to explain.
+    """
+    print(f"Explaining code in file: {file}")
+    # TODO: explicar el código del archivo con GPT, lo hare en algun momento de la vida
 
-    # Hidden subcommand for supercow
-    supercow_parser = subparsers.add_parser('moo', help=argparse.SUPPRESS)
-    supercow_parser.set_defaults(func=print_supercow)
+def go_benchmark_project():
+    """Run Go benchmarks."""
+    print("Running Go benchmarks...")
+    subprocess.run(['go', 'test', '-v', '-bench=.'])
 
-    minimiau_parser = subparsers.add_parser('miau', help=argparse.SUPPRESS)
-    minimiau_parser.set_defaults(func=reset_moo_count)
+def go_build_project():
+    """Build the Go project."""
+    print("Building the Go project...")
+    subprocess.run(['go', 'build', '-v'])
 
-    help_parser = subparsers.add_parser('-h', help='Show the help message and exit')
-    help_parser.set_defaults(func=CustomArgumentParser.print_help)
+def go_clean_project():
+    """Clean the Go project."""
+    print("Cleaning the Go project...")
+    subprocess.run(['go', 'clean', '-v'])
 
-     # Subcommand for go mod tidy
-    subparsers.add_parser('go-mod-tidy', help='Run go mod tidy')
+def go_install_project():
+    """Install the Go project."""
+    print("Installing the Go project...")
+    subprocess.run(['go', 'install', '-v'])
 
+def go_run_project():
+    """Run the Go project."""
+    current_file = sys.argv[0]
+    print(f"Running the Go project using {current_file}...")
+    subprocess.run(['go', 'run', '-v', current_file])
+
+def go_test_project():
+    """Run Go tests."""
+    print("Running Go tests...")
+    subprocess.run(['go', 'test', '-v'])
+
+def handle_language_command(command, language):
+    """Handle commands related to specific languages.
+
+    Args:
+        command (str): The command to run.
+        language (str): The language to run the command for.
+    """
+    increment_moo_count()
+
+    if language is None:
+        run_command_for_both_languages(command)
+    elif language == 'go':
+        run_command_for_go(command)
+    elif language == 'python':
+        run_command_for_python(command)
+
+def handle_no_command_provided(parser):
+    """Handle the case when no command is provided.
+
+    Args:
+        parser (argparse.ArgumentParser): The argument parser object.
+    """
+    print("Human error joke: Why don't users tell jokes? Because they can't find the 'any' key.")
+    parser.print_help()
+    sys.exit(1)
+
+def increment_moo_count():
+    """Increment the moo count.
+
+    Returns:
+        int: The updated moo count.
+    """
+    home_dir = os.path.expanduser("~")
+    file_path = os.path.join(home_dir, ".moo")
+
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
+            count = int(file.read().strip())
+    else:
+        count = 0
+
+    count += 1
+
+    with open(file_path, "w") as file:
+        file.write(str(count))
+
+    return count
+
+def install_project():
+    """Install both Go and Python projects."""
+    go_install_project()
+    python_install_project()
+
+def make_commit(message):
+    """Make a git commit with the given message.
+
+    Args:
+        message (str): The commit message.
+    """
+    print(f"Making a git commit with message: '{message}'")
+    subprocess.run(['git', 'commit', '-m', message])
+
+def parse_arguments(parser):
+    """Parse command line arguments.
+
+    Args:
+        parser (argparse.ArgumentParser): The argument parser object.
+
+    Returns:
+        argparse.Namespace: The parsed arguments.
+    """
     if len(sys.argv) == 1:
         print("No arguments provided. Use -h for help.")
         print("Remember, this program has supercow powers!")
         sys.exit(1)
 
     args = parser.parse_args()
-    if args.command is None:
-        print_human_error_joke()
-        parser.print_help(filtered=True)
-        sys.exit(1)
+    return args
 
-    joke_flag = handle_command(args)
+def print_basic_cow():
+    """Print the basic cow ASCII art."""
+    print("        (__)")
+    print("        (--)")
+    print("  /------\\/")
+    print(" / |    ||")
+    print("*  /\\---/\\")
+    print("   ~~   ~~")
+    print("...Have you mooed today?...")
 
-    if joke_flag:
-        print_programming_joke()
+def print_medium_cow():
+    """Print the medium cow ASCII art."""
+    print("        (__)")
+    print("        (oo)")
+    print("  /------\\/")
+    print(" / |    ||")
+    print("*  /\\---/\\")
+    print("   ~~   ~~")
+    print("...Keep mooing!...")
 
-def handle_command(args):
-    if args.command == 'joke':
-        print_programming_joke()
-        return False
-    elif args.command == 'pre-commit':
-        run_pre_commit(args.test_type)
-    elif args.command == 'commit':
-        make_commit(args.message)
-    elif args.command == 'push':
-        push_code(args.remote, args.branch)
-    elif args.command == 'explain':
-        explain_code(args.file)
-    elif args.command == 'build-docs':
-        build_docs()
-    elif args.command == 'moo':
-        print_supercow()
-        return False
-    elif args.command == 'miau':
-        reset_moo_count()
-        print_supercow()
-        return False
-    elif args.command == 'go-mod-tidy':
-        run_go_mod_tidy()
-        return False
-    return True
+def print_super_cow():
+    """Print the super cow ASCII art."""
+    print("        (__)")
+    print("        (@@)")
+    print("  /------\\/")
+    print(" / |    ||")
+    print("*  /\\---/\\")
+    print("   ~~   ~~")
+    print("...Super Moo!...")
 
-def run_go_mod_tidy():
-    # Navigate to the Go source directory and run go mod tidy
-    go_src_dir = os.path.join(os.getcwd(), 'src', 'go')
-    if os.path.isdir(go_src_dir):
-        print(f"Navigating to {go_src_dir} and running 'go mod tidy'...")
-        result = subprocess.run(['go', 'mod', 'tidy'], cwd=go_src_dir, capture_output=True, text=True)
-        if result.returncode == 0:
-            print("Successfully ran 'go mod tidy'.")
-        else:
-            print(f"Error running 'go mod tidy': {result.stderr}")
-    else:
-        print(f"Directory {go_src_dir} does not exist. Please check the path.")
-
-
-def print_programming_joke():
-    joke = random.choice(programming_jokes)
-    print(joke)
+def print_ultimate_cow():
+    """Print the ultimate cow ASCII art."""
+    print("        (__)")
+    print("        (@@)")
+    print("  /------\\/")
+    print(" / |   |S|")
+    print("*  /\\---/\\")
+    print("   ~~   ~~")
+    print("...Ultimate Super Moo!!!...")
 
 def print_human_error_joke():
+    """Print a random human error joke."""
     joke = random.choice(human_error_jokes)
     print(joke)
 
+
+def print_programming_joke():
+    """Print a random programming joke."""
+    joke = random.choice(programming_jokes)
+    print(joke)
+
+def print_supercow():
+    """Print the supercow ASCII art based on the moo count."""
+    moo_count = increment_moo_count()
+    print("You have mooed " + str(moo_count) + " times")
+
+    if (moo_count < 10):
+        print_basic_cow()
+    elif (moo_count < 20):
+        print_medium_cow()
+    elif (moo_count < 30):
+        print_super_cow()
+    else:
+        print_ultimate_cow()
+
+def push_code(remote, branch):
+    """Push code to the specified remote and branch.
+
+    Args:
+        remote (str): The remote repository name.
+        branch (str): The branch name.
+    """
+    print(f"Pushing code to {remote}/{branch}")
+    subprocess.run(['git', 'push', remote, branch])
+
+def python_benchmark_project():
+    """Run Python benchmarks."""
+    print("Running Python benchmarks...")
+    subprocess.run(['pytest', '-v', '--benchmark-only'])
+
+def python_build_project():
+    """Build the Python project."""
+    print("Building the Python project...")
+    subprocess.run(['python', 'setup.py', 'sdist', 'bdist_wheel'])
+
+def python_clean_project():
+    """Clean the Python project."""
+    print("Cleaning the Python project...")
+    subprocess.run(['rm', '-rf', 'build', 'dist', '*.egg-info'])
+
+def python_install_project():
+    """Install the Python project."""
+    print("Installing the Python project...")
+    subprocess.run(['pip', 'install', '.'])
+
+def python_run_project():
+    """Run the Python project."""
+    current_file = sys.argv[0]
+    print(f"Running the Python project using {current_file}...")
+    subprocess.run(['python', current_file])
+
+def python_test_project():
+    """Run Python tests."""
+    print("Running Python tests...")
+    subprocess.run(['pytest', '-v'])
+
+def reset_moo_count():
+    """Reset the moo count to zero.
+
+    Returns:
+        int: The reset moo count.
+    """
+    print("A little cat has miau'd, the cow is afraid of the cat's super cuteness...")
+    home_dir = os.path.expanduser("~")
+    file_path = os.path.join(home_dir, ".moo")
+    with open(file_path, "w") as file:
+        file.write("0")
+    return 0
+
+def run_command_for_both_languages(command):
+    """Run the specified command for both Go and Python projects.
+
+    Args:
+        command (str): The command to run.
+    """
+    if command == 'build':
+        build_project()
+    elif command == 'run':
+        run_project()
+    elif command == 'test':
+        test_project()
+    elif command == 'benchmark':
+        benchmark_project()
+    elif command == 'install':
+        install_project()
+    elif command == 'clean':
+        clean_project()
+
+def run_command_for_go(command):
+    """Run the specified command for the Go project.
+
+    Args:
+        command (str): The command to run.
+    """
+    if command == 'build':
+        go_build_project()
+    elif command == 'run':
+        go_run_project()
+    elif command == 'test':
+        go_test_project()
+    elif command == 'benchmark':
+        go_benchmark_project()
+    elif command == 'install':
+        go_install_project()
+    elif command == 'clean':
+        go_clean_project()
+
+def run_command_for_python(command):
+    """Run the specified command for the Python project.
+
+    Args:
+        command (str): The command to run.
+    """
+    if command == 'build':
+        python_build_project()
+    elif command == 'run':
+        python_run_project()
+    elif command == 'test':
+        python_test_project()
+    elif command == 'benchmark':
+        python_benchmark_project()
+    elif command == 'install':
+        python_install_project()
+    elif command == 'clean':
+        python_clean_project()
+
+def run_go_mod_tidy():
+    """Run the 'go mod tidy' command."""
+    print("Running go mod tidy...")
+    subprocess.run(['go', 'mod', 'tidy'])
+
 def run_pre_commit(test_type):
+    """Run pre-commit tests based on the specified type.
+
+    Args:
+        test_type (str): The type of test to run ('go', 'python', '1', '2').
+    """
     if test_type in ['go', '1']:
         print("Running pre-commit over Go...")
         # Aquí podrías añadir el comando para ejecutar las pruebas de Go
@@ -186,73 +389,46 @@ def run_pre_commit(test_type):
         else:
             run_pre_commit(choice)
 
-def make_commit(message):
-    print(f"Making a git commit with message: '{message}'")
-    subprocess.run(['git', 'commit', '-m', message])
+def run_project():
+    """Run both Go and Python projects."""
+    go_run_project()
+    python_run_project()
 
-def push_code(remote, branch):
-    print(f"Pushing code to {remote}/{branch}")
-    subprocess.run(['git', 'push', remote, branch])
+def setup_parser():
+    """Set up the argument parser.
 
-def explain_code(file):
-    print(f"Explaining code in file: {file}")
-    # Aquí podrías añadir el comando para explicar el código del archivo
+    Returns:
+        argparse.ArgumentParser: The configured argument parser.
+    """
+    parser = CustomArgumentParser(description="A CLI tool for the modak project. This program has supercow powers!")
+    subparsers = parser.add_subparsers(dest='command')
 
-def build_docs():
-    print("Building the documentation...")
-    # Aquí podrías añadir el comando para construir la documentación
+    add_language_subparsers(subparsers, 'build', 'Build the project')
+    add_language_subparsers(subparsers, 'run', 'Run the project')
+    add_language_subparsers(subparsers, 'test', 'Run tests')
+    add_language_subparsers(subparsers, 'benchmark', 'Run benchmarks')
+    add_language_subparsers(subparsers, 'install', 'Install the project')
+    add_language_subparsers(subparsers, 'clean', 'Clean the project')
 
-def print_supercow():
-    moo_count = increment_moo_count()
-    print("You have mooed " + str(moo_count) + " times")
+    subparsers.add_parser('go-mod-tidy', help='Run go mod tidy')
 
-    if moo_count < 10:
-        print_basic_cow()
-    elif moo_count < 20:
-        print_medium_cow()
-    elif moo_count < 30:
-        print_super_cow()
-    else:
-        print_ultimate_cow()
+    supercow_parser = subparsers.add_parser('moo', help=argparse.SUPPRESS)
+    supercow_parser.set_defaults(func=print_supercow)
 
-def print_basic_cow():
-    print("        (__)")
-    print("        (oo)")
-    print("  /------\\/")
-    print(" / |    ||")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Have you mooed today?...")
+    return parser
 
-def print_medium_cow():
-    print("        (__)")
-    print("        (oo)")
-    print("  /------\\/")
-    print(" / |    ||")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Keep mooing!...")
-
-def print_super_cow():
-    print("        (__)")
-    print("        (@@)")
-    print("  /------\\/")
-    print(" / |    ||")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Super Moo!...")
-
-def print_ultimate_cow():
-    print("        (__)")
-    print("        (@@)")
-    print("  /------\\/")
-    print(" / |   |S|")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Ultimate Super Moo!!!...")
+def test_project():
+    """Run tests for both Go and Python projects."""
+    go_test_project()
+    python_test_project()
 
 class CustomArgumentParser(argparse.ArgumentParser):
     def error(self, message):
+        """Handle argument parsing errors.
+
+        Args:
+            message (str): The error message.
+        """
         # Eliminar "moo" del mensaje
         if "'moo'" in message:
             message = message.replace(", 'moo'", "")
@@ -267,6 +443,11 @@ class CustomArgumentParser(argparse.ArgumentParser):
         sys.exit(2)
 
     def print_help(self, filtered=False):
+        """Print help message.
+
+        Args:
+            filtered (bool): Whether to filter the help message.
+        """
         if filtered:
             import io
             import contextlib
@@ -280,6 +461,22 @@ class CustomArgumentParser(argparse.ArgumentParser):
             print(filtered_help_text)
         else:
             super().print_help()
+
+
+def main():
+    """Main entry point of the script."""
+    parser = setup_parser()
+    args = parse_arguments(parser)
+
+    if args.command is None:
+        handle_no_command_provided(parser)
+
+    if args.command in ['build', 'run', 'test', 'benchmark', 'install', 'clean']:
+        handle_language_command(args.command, args.language)
+    elif args.command == 'go-mod-tidy':
+        run_go_mod_tidy()
+    elif args.command == 'moo':
+        print_supercow()
 
 if __name__ == "__main__":
     main()

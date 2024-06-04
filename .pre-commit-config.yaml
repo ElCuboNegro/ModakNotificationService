@@ -14,8 +14,10 @@ repos:
         args: ['-l', '80', '--check', '--diff']
         files: src/python/  # Ensure Black only checks the Python source directory
 
-  - repo: https://github.com/golangci/golangci-lint
-    rev: v1.59.0
+  - repo: local
     hooks:
-      - id: golangci-lint
-        args: ['run', './src/go/', --help]  # Corrected the config path
+      - id: go_mod_tidy
+        name: Go Mod Tidy
+        entry: bash -c 'cd src/go && go mod tidy'
+        language: system
+        types: [go]
