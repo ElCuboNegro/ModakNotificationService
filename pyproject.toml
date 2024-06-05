@@ -49,6 +49,7 @@ name = "API depends on Notifications and Rate Limiter"
 type = "layers"
 containers = "notificationservice"
 layers = [
+    "infra",
     "rate_limiter",
     "notifications",
     "api"
@@ -56,3 +57,23 @@ layers = [
 ignore_imports = []
 
 [pytest]
+
+
+env = [
+    "MODAK_TEST_MODE=1",
+    "MODAK_DATABASE_CONNECTION_URL=sqlite+aiosqlite:////tmp/marvin/marvin-tests.sqlite",
+    "MODAK_LOG_CONSOLE_WIDTH=120",
+]
+
+# black configuration
+[tool.black]
+preview = true
+
+# ruff configuration
+[tool.ruff]
+extend-select = ["I"]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ['I', 'F401', 'E402']
+"conftest.py" = ["F401", "F403"]
+'tests/fixtures/*.py' = ['F403']

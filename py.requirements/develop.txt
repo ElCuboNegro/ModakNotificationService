@@ -13,10 +13,12 @@
 -r ./py.requirements/testing.txt
 black > 24.4
 coverage[toml]
-import-linter==2.0
+import-linter
 modernize
+pre-commit
 pylint
+ruff
+setuptools
 tox >= 3.10.0
 twine # for packaging and upload to PyPi
-
 wheel

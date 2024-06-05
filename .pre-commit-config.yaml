@@ -8,6 +8,15 @@ repos:
         entry: lint-imports
         verbose: true
 
+  - repo: local
+    hooks:
+      - id: BDD tests
+        name: "behave tests"
+        language: system
+        pass_filenames: false
+        entry: behave
+        verbose: true
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.2.3
     hooks:
