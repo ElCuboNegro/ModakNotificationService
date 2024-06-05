@@ -111,7 +111,7 @@ def python_install_project():
 def python_clean_project():
     """Clean the Python project."""
     print("Cleaning the Python project...")
-    patterns_to_remove = ["build", "dist", "*.egg-info", "__pycache__"]
+    patterns_to_remove = ["build", "dist", "*.egg-info", "__pycache__", ".pytest_cache"]
 
     for root, dirs, files in os.walk(PYTHON_SRC_PATH, topdown=False):
         for name in dirs:

@@ -17,6 +17,15 @@ repos:
         entry: behave
         verbose: true
 
+  - repo: local
+    hooks:
+      - id: Pytests tests
+        name: "pytest tests"
+        language: system
+        pass_filenames: false
+        entry: pytest
+        verbose: true
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.2.3
     hooks:
