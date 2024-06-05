@@ -50,3 +50,12 @@ El proyecto tiene su propio CLI, diseñado para ejecutar varias de las tareas no
 ```bash
 modak -h
 ```
+
+
+## Versioning
+
+This project uses [Semantic Versioning](https://semver.org/). For each new release, the version number will be incremented based on the following criteria:
+
+- **MAJOR** version changes include incompatible API changes.
+- **MINOR** version changes add functionality in a backward-compatible manner.
+- **PATCH** version changes include backward-compatible bug fixes.

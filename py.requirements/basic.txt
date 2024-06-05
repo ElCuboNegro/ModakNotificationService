@@ -6,7 +6,5 @@
 #    pip install -r ./py.requirements/basic.txt
 # ============================================================================
 
-import-linter
-pre-commit
-# -- PROJECT RELATED:
-setuptools
+alembic
+sqlalchemy

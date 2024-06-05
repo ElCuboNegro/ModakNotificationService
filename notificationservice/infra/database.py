@@ -15,9 +15,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-import marvin
-from marvin import get_logger
-
+import notificationservice
 
 class DatabaseWarning(UserWarning):
     pass
@@ -28,16 +26,10 @@ logger = get_logger(__name__)
 METADATA = sqlmodel.SQLModel.metadata
 
 engine_kwargs = {}
-# sqlite doesn't support pool configuration
-if marvin.settings.database_connection_url.get_secret_value().startswith("postgresql"):
-    engine_kwargs.update(
-        pool_size=50,
-        max_overflow=20,
-    )
 
 engine = create_async_engine(
-    marvin.settings.database_connection_url.get_secret_value(),
-    echo=marvin.settings.database_echo,
+    notificationservice.settings.database_connection_url.get_secret_value(),
+    echo=notificationservice.settings.database_echo,
     **engine_kwargs,
 )
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -228,9 +220,9 @@ def check_alembic_version():
         warnings.warn(
             (
                 "Error getting the current database version. This can happen if you"
-                " are developing against the Marvin database and switched branches"
+                " are developing against the notificationservice database and switched branches"
                 " without resetting it. Some features may be broken, but you can"
-                f' continue using Marvin otherwise. Error was: "{str(exc)}"'
+                f' continue using notificationservice otherwise. Error was: "{str(exc)}"'
             ),
             DatabaseWarning,
         )
@@ -240,16 +232,16 @@ def check_alembic_version():
     # if there is no database version, automatically attempt to upgrade
     if not current:
         try:
-            marvin.get_logger("database").debug(
+            notificationservice.get_logger("database").debug(
                 "No database version found; attempting automatic upgrade..."
             )
             alembic.command.upgrade(alembic_cfg, "head")
         except Exception as exc:
             warnings.warn(
                 (
-                    "The Marvin database appears to be empty and automatic upgrade"
+                    "The notificationservice database appears to be empty and automatic upgrade"
                     " failed. Some features may be broken, but you can continue using"
-                    " Marvin otherwise. Please try to run `marvin database upgrade`"
+                    " notificationservice otherwise. Please try to run `modak database upgrade`"
                     f" manually. Error: {repr(exc)}"
                 ),
                 DatabaseWarning,
@@ -270,9 +262,9 @@ def check_alembic_version():
                 (
                     "Database migrations are not up to date (current version is"
                     f" {current}; head is {head}). This is expected after upgrading"
-                    " Marvin to a new version, but some features may be broken until"
-                    " the database is upgraded. Marvin does not do this automatically;"
-                    " please run `marvin database upgrade` yourself."
+                    " Modak to a new version, but some features may be broken until"
+                    " the database is upgraded. Modak does not do this automatically;"
+                    " please run `Modak database upgrade` yourself."
                 ),
                 DatabaseWarning,
             )

@@ -9,9 +9,6 @@
 *.dylib
 *.egg-info
 
-# .git   cxxk
-.git
-
 # Test bin lc mc   zx;xary, built with `go test -c`
 *.test
 
