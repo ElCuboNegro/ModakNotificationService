@@ -7,6 +7,9 @@ import shutil
 import fnmatch
 from scripts import list_files
 
+import io
+import contextlib
+
 programming_jokes = [
     "Why don't programmers like to code in the jungle? Because there are too many bugs.",
     "Why do beginners in programming always feel lost? Because they are in a new world without a map.",
@@ -231,9 +234,6 @@ class CustomArgumentParser(argparse.ArgumentParser):
     def print_help(self, filtered=False):
         """Print help message."""
         if filtered:
-            import io
-            import contextlib
-
             help_output = io.StringIO()
             with contextlib.redirect_stdout(help_output):
                 super().print_help()
