@@ -26,40 +26,27 @@ Cada una de estas carpetas contiene el código fuente correspondiente, así como
 
 Para la ejecución del proyecto es necesario instalar `pre-commit` [https://pre-commit.com/], y `golangci-lint` [https://github.com/golangci/golangci-lint]. Para ahorrar costos, el CI se ejecuta en instancias pre-commit, intentando evitar la pérdida de tiempo de ejecución dentro de GitHub Actions.
 
+Ejecute el proyecto con python 3.10
+
+```bash
+brew install python@3.10
+```
+
 Una vez instalado Python y clonado el presente repositorio, ejecute:
 
 ```bash
-pip install pre-commit
-```
-
-En caso de usar MacOS y tener Homebrew, puede instalarlo mediante:
-```bash
-brew install pre-commit
+pipx install --editable .
 ```
 
 Luego, ya en el folder del proyecto, (Y CADA VEZ QUE EL PROYECTO SE CLONE) ejecute:
 ```bash
 pre-commit install
+pre-commit
 ```
 
+## CLI:
+El proyecto tiene su propio CLI, diseñado para ejecutar varias de las tareas normales del desarrollo, incluyendo los tests para Python y Go. Para conocer todos los comandos puede utilizar el comando "help" o "-h
 
-### Python
-
-1. **Crea y activa el entorno virtual de Python:**
-
-    ```bash
-    virtualenv --python python3 .venv
-    source .venv/bin/activate
-    ```
-
-    En Windows:
-
-    ```bash
-    call .venv/Scripts/activate
-    ```
-
-2. **Instala los paquetes requeridos con pip:**
-
-    ```bash
-    pip install -r py.requirements/all.txt
-    ```
+```bash
+modak -h
+```

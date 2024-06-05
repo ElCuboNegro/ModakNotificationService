@@ -1,9 +1,8 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def parse_requirements(file):
     """Load requirements from a set of requirements files"""
-
     requirements = []
     with open(file, "r", encoding="utf-8") as f:
         for line in f:
@@ -18,14 +17,13 @@ def parse_requirements(file):
 
 
 setup(
-    name="modak",
+    name="notificationservice",
     version="0.1",
-    packages=["scripts"],
-    package_dir={"scripts": "scripts"},
+    packages=find_packages(where="src"),
     entry_points={
         "console_scripts": [
-            "modak=scripts.cli:main",
+            "modaknotificationservice=modaknotificationservice.notifications:main"
         ],
     },
-    install_requires=parse_requirements("./src/python/py.requirements/all.txt"),
+    install_requires=parse_requirements("py.requirements/basic.txt"),
 )

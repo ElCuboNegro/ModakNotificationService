@@ -6,4 +6,7 @@
 #    pip install -r ./src/python/py.requirements/basic.txt
 # ============================================================================
 
+import-linter
+pre-commit
 # -- PROJECT RELATED:
+setuptools

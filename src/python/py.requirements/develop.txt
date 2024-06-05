@@ -17,4 +17,6 @@ import-linter==2.0
 modernize
 pylint
 tox >= 3.10.0
-twine
+twine # for packaging and upload to PyPi
+
+wheel

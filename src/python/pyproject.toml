@@ -1,50 +1,41 @@
 [tool.importlinter]
-root_package = "./src/python:main"
+root_package = "notificationserver"
 
 [[tool.importlinter.contracts]]
-name = "CLI > Context > Library, Runner > Extras > IO & Pipeline"
+name = "Notifications depend on Rate Limiter and Config"
 type = "layers"
-containers = "kedro"
+containers = "modak"
 layers = [
-    "framework.cli",
+    "config",
+    "rate_limiter",
+    "notifications"
 ]
-ignore_imports = [
-    "kedro.runner.parallel_runner -> kedro.framework.project",
-    "kedro.framework.hooks.specs -> kedro.framework.context"
+ignore_imports = []
+
+[[tool.importlinter.contracts]]
+name = "Rate Limiter does not depend on Notifications"
+type = "forbidden"
+source_modules = [
+    "modak.rate_limiter"
+]
+forbidden_modules = [
+    "modak.notifications"
 ]
 
 [[tool.importlinter.contracts]]
-name = "Pipeline and IO are independent"
+name = "Config is independent"
 type = "independence"
 modules = [
-    "kedro.pipeline",
-    "kedro.io"
+    "modak.config"
 ]
 
 [[tool.importlinter.contracts]]
-name = "Config cannot import Runner et al"
-type = "forbidden"
-source_modules = [
-    "kedro.config"
+name = "API depends on Notifications and Rate Limiter"
+type = "layers"
+containers = "modak"
+layers = [
+    "rate_limiter",
+    "notifications",
+    "api"
 ]
-forbidden_modules = [
-    "kedro.runner",
-    "kedro.io",
-    "kedro.pipeline",
-]
-
-[[tool.importlinter.contracts]]
-name = "Runner et al cannot import Config"
-type = "forbidden"
-source_modules = [
-    "kedro.runner",
-    "kedro.io",
-    "kedro.pipeline",
-]
-forbidden_modules = [
-    "kedro.config"
-]
-ignore_imports = [
-    "kedro.framework.context.context -> kedro.config",
-    "kedro.framework.session.session -> kedro.config"
-]
+ignore_imports = []

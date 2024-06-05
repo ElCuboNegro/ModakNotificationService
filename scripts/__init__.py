@@ -1,9 +1,11 @@
 import os
 import sys
 
+
 def ejecutar_comando(directorio, comando):
     os.chdir(directorio)
     os.system(comando)
+
 
 def main():
     if len(sys.argv) != 3:
@@ -14,6 +16,7 @@ def main():
     comando = sys.argv[1]
 
     ejecutar_comando(directorio, comando)
+
 
 if __name__ == "__main__":
     main()
