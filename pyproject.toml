@@ -1,11 +1,12 @@
 [tool.importlinter]
-root_package = "notificationserver"
+root_package = "notificationservice"
 
 [[tool.importlinter.contracts]]
 name = "Notifications depend on Rate Limiter and Config"
 type = "layers"
-containers = "modak"
+containers = "notificationservice"
 layers = [
+    "infra",
     "config",
     "rate_limiter",
     "notifications"
@@ -16,26 +17,42 @@ ignore_imports = []
 name = "Rate Limiter does not depend on Notifications"
 type = "forbidden"
 source_modules = [
-    "modak.rate_limiter"
+    "notificationservice.rate_limiter"
 ]
 forbidden_modules = [
-    "modak.notifications"
+    "notificationservice.notifications"
+]
+
+[[tool.importlinter.contracts]]
+name = "Infraestructure does not depend on nothing"
+type = "forbidden"
+source_modules = [
+    "notificationservice.infra"
+]
+forbidden_modules = [
+    "notificationservice.notifications",
+    "notificationservice.api",
+    "notificationservice.config",
+    "notificationservice.notifications",
+    "notificationservice.rate_limiter"
 ]
 
 [[tool.importlinter.contracts]]
 name = "Config is independent"
 type = "independence"
 modules = [
-    "modak.config"
+    "notificationservice.config"
 ]
 
 [[tool.importlinter.contracts]]
 name = "API depends on Notifications and Rate Limiter"
 type = "layers"
-containers = "modak"
+containers = "notificationservice"
 layers = [
     "rate_limiter",
     "notifications",
     "api"
 ]
 ignore_imports = []
+
+[pytest]

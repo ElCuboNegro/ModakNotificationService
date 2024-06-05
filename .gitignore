@@ -9,10 +9,10 @@
 *.dylib
 *.egg-info
 
-# .git
+# .git   cxxk
 .git
 
-# Test binary, built with `go test -c`
+# Test bin lc mc   zx;xary, built with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
@@ -20,6 +20,10 @@
 
 # python build
 dist
+build
+
+# pytest cache
+.pytest_cache/
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
@@ -30,3 +34,7 @@ go.work.sum
 
 # python cache
 __pycache__/
+*/__pycache__/
+
+# python environment
+.venv

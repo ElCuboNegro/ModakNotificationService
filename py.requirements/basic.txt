@@ -3,7 +3,7 @@
 # ============================================================================
 # REQUIRES: Python >= 3
 # DESCRIPTION:
-#    pip install -r ./src/python/py.requirements/basic.txt
+#    pip install -r ./py.requirements/basic.txt
 # ============================================================================
 
 import-linter

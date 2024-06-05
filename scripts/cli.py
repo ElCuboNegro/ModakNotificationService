@@ -3,6 +3,9 @@ import argparse
 import subprocess
 import os
 import sys
+import shutil
+import fnmatch
+from scripts.list_files import list_files
 
 programming_jokes = [
     "Why don't programmers like to code in the jungle? Because there are too many bugs.",
@@ -24,57 +27,14 @@ def get_project_root():
 
 # Set project paths
 PROJECT_ROOT = get_project_root()
-GO_SRC_PATH = os.path.join(PROJECT_ROOT, "src", "go")
-PYTHON_SRC_PATH = os.path.join(PROJECT_ROOT, "src", "python")
+PYTHON_SRC_PATH = os.path.join(PROJECT_ROOT, "")
+TREE_OUTPUTFILE_LOCATION = "project_structure.txt"
 
 
-def add_language_subparsers(subparsers, command, help_text):
-    """Add subparsers for different commands and languages."""
-    parser = subparsers.add_parser(command, help=help_text)
-    parser.add_argument(
-        "language",
-        nargs="?",
-        choices=["go", "python"],
-        help="Language to run the command for (go, python)",
-    )
-
-
-def handle_language_command(command, language):
-    """Handle commands related to specific languages."""
+def handle_python_command(command):
+    """Handle commands related to the Python project."""
     increment_moo_count()
-
-    if language is None:
-        run_command_for_both_languages(command)
-    elif language == "go":
-        run_command_for_go(command)
-    elif language == "python":
-        run_command_for_python(command)
-
-
-def run_command_for_both_languages(command):
-    """Run the specified command for both Go and Python projects."""
-    command_map = {
-        "build": build_project,
-        "run": run_project,
-        "test": test_project,
-        "benchmark": benchmark_project,
-        "install": install_project,
-        "clean": clean_project,
-    }
-    command_map.get(command, lambda: print(f"Unknown command {command}"))()
-
-
-def run_command_for_go(command):
-    """Run the specified command for the Go project."""
-    command_map = {
-        "build": go_build_project,
-        "run": go_run_project,
-        "test": go_test_project,
-        "benchmark": go_benchmark_project,
-        "install": go_install_project,
-        "clean": go_clean_project,
-    }
-    command_map.get(command, lambda: print(f"Unknown command {command}"))()
+    run_command_for_python(command)
 
 
 def run_command_for_python(command):
@@ -118,84 +78,6 @@ def reset_moo_count():
     return 0
 
 
-def build_project():
-    """Build both Go and Python projects."""
-    go_build_project()
-    python_build_project()
-
-
-def run_project():
-    """Run both Go and Python projects."""
-    go_run_project()
-    python_run_project()
-
-
-def test_project():
-    """Run tests for both Go and Python projects."""
-    go_test_project()
-    python_test_project()
-
-
-def benchmark_project():
-    """Run benchmarks for both Go and Python projects."""
-    go_benchmark_project()
-    python_benchmark_project()
-
-
-def install_project():
-    """Install both Go and Python projects."""
-    go_install_project()
-    python_install_project()
-
-
-def clean_project():
-    """Clean both Go and Python projects."""
-    go_clean_project()
-    python_clean_project()
-
-
-def go_benchmark_project():
-    """Run Go benchmarks."""
-    print("Running Go benchmarks...")
-    subprocess.run(["go", "test", "-v", "-bench=."])
-
-
-def go_build_project():
-    """Build the Go project."""
-    print(f"Running go mod tidy in {GO_SRC_PATH}...")
-    subprocess.run(["go", "mod", "tidy"], cwd=GO_SRC_PATH, check=True)
-
-
-def go_clean_project():
-    """Clean the Go project."""
-    print("Cleaning the Go project...")
-    subprocess.run(["go", "clean", "-v"], cwd=GO_SRC_PATH, check=True)
-
-
-def go_install_project():
-    """Install the Go project."""
-    print("Installing the Go project...")
-    subprocess.run(["go", "install", "-v"], cwd=GO_SRC_PATH, check=True)
-
-
-def go_run_project():
-    """Run the Go project."""
-    print("Running the Go project...")
-    subprocess.run(["go", "run", "-v", GO_SRC_PATH])
-
-
-def go_test_project():
-    """Run Go tests."""
-    print("Running Go tests...")
-    subprocess.run(["go", "test", "-v"])
-
-
-def python_benchmark_project():
-    """Run Python benchmarks."""
-    print("Running Python benchmarks...")
-    subprocess.run(["pytest", "-v", "--benchmark-only"])
-
-
 def python_build_project():
     """Build the Python project."""
     print("Building the Python project...")
@@ -204,18 +86,6 @@ def python_build_project():
         cwd=PYTHON_SRC_PATH,
         check=True,
     )
-
-
-def python_clean_project():
-    """Clean the Python project."""
-    print("Cleaning the Python project...")
-    subprocess.run(["rm", "-rf", "build", "dist", "*.egg-info"], cwd=PYTHON_SRC_PATH)
-
-
-def python_install_project():
-    """Install the Python project."""
-    print("Installing the Python project...")
-    subprocess.run([sys.executable, "-m", "pip", "install", "."], cwd=PYTHON_SRC_PATH)
 
 
 def python_run_project():
@@ -229,7 +99,40 @@ def python_run_project():
 def python_test_project():
     """Run Python tests."""
     print("Running Python tests...")
-    subprocess.run(["pytest", "-v"], cwd=PYTHON_SRC_PATH)
+    subprocess.run(["pytest", "-v"])
+
+
+def python_benchmark_project():
+    """Run Python benchmarks."""
+    print("Running Python benchmarks...")
+    subprocess.run(["pytest", "-v", "--benchmark-only"])
+
+
+def python_install_project():
+    """Install the Python project."""
+    print("Installing the Python project...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "."], cwd=PYTHON_SRC_PATH)
+
+
+def python_clean_project():
+    """Clean the Python project."""
+    print("Cleaning the Python project...")
+    patterns_to_remove = ["build", "dist", "*.egg-info", "__pycache__"]
+
+    for root, dirs, files in os.walk(PYTHON_SRC_PATH, topdown=False):
+        for name in dirs:
+            for pattern in patterns_to_remove:
+                if name == pattern or fnmatch.fnmatch(name, pattern):
+                    dir_path = os.path.join(root, name)
+                    print(f"Removing directory: {dir_path}")
+                    shutil.rmtree(dir_path, ignore_errors=True)
+
+        for name in files:
+            for pattern in patterns_to_remove:
+                if fnmatch.fnmatch(name, pattern):
+                    file_path = os.path.join(root, name)
+                    print(f"Removing file: {file_path}")
+                    os.remove(file_path)
 
 
 def make_commit(message):
@@ -244,48 +147,23 @@ def push_code(remote, branch):
     subprocess.run(["git", "push", remote, branch])
 
 
-def print_basic_cow():
-    """Print the basic cow ASCII art."""
-    print("        (__)")
-    print("        (--)")
-    print("  /------\\/")
-    print(" / |    ||")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Have you mooed today?...")
+def print_cow(moo_count):
+    """Print the cow ASCII art based on the moo count."""
+    cow_art = [
+        "        (__) \n        (--) \n  /------\\/ \n / |    || \n*  /\\---/\\ \n   ~~   ~~ \n...Have you mooed today?...",
+        "        (__) \n        (oo) \n  /------\\/ \n / |    || \n*  /\\---/\\ \n   ~~   ~~ \n...Keep mooing!...",
+        "        (__) \n        (@@) \n  /------\\/ \n / |    || \n*  /\\---/\\ \n   ~~   ~~ \n...Super Moo!...",
+        "        (__) \n        (@@) \n  /------\\/ \n / |   |S| \n*  /\\---/\\ \n   ~~   ~~ \n...Ultimate Super Moo!!!...",
+    ]
 
-
-def print_medium_cow():
-    """Print the medium cow ASCII art."""
-    print("        (__)")
-    print("        (oo)")
-    print("  /------\\/")
-    print(" / |    ||")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Keep mooing!...")
-
-
-def print_super_cow():
-    """Print the super cow ASCII art."""
-    print("        (__)")
-    print("        (@@)")
-    print("  /------\\/")
-    print(" / |    ||")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Super Moo!...")
-
-
-def print_ultimate_cow():
-    """Print the ultimate cow ASCII art."""
-    print("        (__)")
-    print("        (@@)")
-    print("  /------\\/")
-    print(" / |   |S|")
-    print("*  /\\---/\\")
-    print("   ~~   ~~")
-    print("...Ultimate Super Moo!!!...")
+    if moo_count < 10:
+        print(cow_art[0])
+    elif moo_count < 20:
+        print(cow_art[1])
+    elif moo_count < 30:
+        print(cow_art[2])
+    else:
+        print(cow_art[3])
 
 
 def print_human_error_joke():
@@ -303,41 +181,16 @@ def print_programming_joke():
 def print_supercow():
     """Print the supercow ASCII art based on the moo count."""
     moo_count = increment_moo_count()
-    print("You have mooed " + str(moo_count) + " times")
-
-    if moo_count < 10:
-        print_basic_cow()
-    elif moo_count < 20:
-        print_medium_cow()
-    elif moo_count < 30:
-        print_super_cow()
-    else:
-        print_ultimate_cow()
+    print(f"You have mooed {moo_count} times")
+    print_cow(moo_count)
 
 
-def run_go_mod_tidy():
-    """Run the 'go mod tidy' command in the './src/go/...' folder."""
-    print(f"Running go mod tidy in {GO_SRC_PATH}...")
-    subprocess.run(["go", "mod", "tidy"], cwd=GO_SRC_PATH, check=True)
-
-
-def run_pre_commit(test_type):
-    """Run pre-commit tests based on the specified type."""
-    if test_type in ["go", "1"]:
-        print("Running pre-commit over Go...")
-        # Add the command to run Go pre-commit tests
-    elif test_type in ["python", "2"]:
-        print("Running pre-commit over Python...")
-        # Add the command to run Python pre-commit tests
-    else:
-        # If no test_type is provided, prompt the user to choose
-        choice = input(
-            "Please choose the pre-commit to run (1 for Go, 2 for Python, q to quit): "
-        )
-        if choice == "q":
-            print("Skipping pre-commit checks.")
-        else:
-            run_pre_commit(choice)
+def show_project_structure():
+    """Show the project structure."""
+    return list_files(
+        PROJECT_ROOT,
+        os.path.join(PROJECT_ROOT, '.gitignore'),
+        os.path.join(PROJECT_ROOT, TREE_OUTPUTFILE_LOCATION))
 
 
 def explain_code(file):
@@ -408,14 +261,12 @@ def setup_parser():
     )
     subparsers = parser.add_subparsers(dest="command")
 
-    add_language_subparsers(subparsers, "build", "Build the project")
-    add_language_subparsers(subparsers, "run", "Run the project")
-    add_language_subparsers(subparsers, "test", "Run tests")
-    add_language_subparsers(subparsers, "benchmark", "Run benchmarks")
-    add_language_subparsers(subparsers, "install", "Install the project")
-    add_language_subparsers(subparsers, "clean", "Clean the project")
+    python_commands = ["build", "run", "test", "benchmark", "install", "clean"]
+    for cmd in python_commands:
+        subparsers.add_parser(cmd, help=f"{cmd.capitalize()} the project")
 
-    subparsers.add_parser("go-mod-tidy", help="Run go mod tidy")
+    tree = subparsers.add_parser("tree", help="Shows the project structure")
+    tree.set_defaults(func=show_project_structure)
 
     supercow_parser = subparsers.add_parser("moo", help=argparse.SUPPRESS)
     supercow_parser.set_defaults(func=print_supercow)
@@ -432,9 +283,9 @@ def main():
         handle_no_command_provided(parser)
 
     if args.command in ["build", "run", "test", "benchmark", "install", "clean"]:
-        handle_language_command(args.command, args.language)
-    elif args.command == "go-mod-tidy":
-        run_go_mod_tidy()
+        handle_python_command(args.command)
+    elif args.command == "tree":
+        show_project_structure()
     elif args.command == "moo":
         print_supercow()
 

@@ -1,21 +1,37 @@
 import os
 import fnmatch
 
-
 def load_gitignore_patterns(gitignore_path):
     patterns = []
     with open(gitignore_path, "r") as file:
         for line in file:
-            # Remove comments and empty lines
             line = line.strip()
             if line and not line.startswith("#"):
                 patterns.append(line)
     return patterns
 
-
 def matches_patterns(path, patterns):
-    return any(fnmatch.fnmatch(path, pattern) for pattern in patterns)
+    for pattern in patterns:
+        path_norm = path.replace(os.sep, '/')
+        pattern_norm = pattern.replace(os.sep, '/')
 
+        # Exact match
+        if fnmatch.fnmatch(path_norm, pattern_norm):
+            return True
+        # Directory match with trailing slash
+        if path_norm.endswith('/') and fnmatch.fnmatch(path_norm.rstrip('/'), pattern_norm):
+            return True
+        # Any level directory match (e.g., **/__pycache__)
+        if '**/' in pattern_norm:
+            if fnmatch.fnmatch(path_norm, pattern_norm.replace('**/', '**/')):
+                return True
+        # Specific pattern for directories
+        if pattern_norm.endswith('/') and fnmatch.fnmatch(path_norm + '/', pattern_norm):
+            return True
+        # Match without trailing slash
+        if fnmatch.fnmatch(path_norm, pattern_norm.rstrip('/')):
+            return True
+    return False
 
 def list_files(startpath, gitignore_path, output_file=None):
     patterns = load_gitignore_patterns(gitignore_path)
@@ -26,13 +42,13 @@ def list_files(startpath, gitignore_path, output_file=None):
             d
             for d in dirs
             if not matches_patterns(
-                os.path.relpath(os.path.join(root, d), startpath), patterns
+                os.path.relpath(os.path.join(root, d), startpath) + os.sep, patterns
             )
         ]
         level = root.replace(startpath, "").count(os.sep)
         indent = " " * 4 * (level)
         line = "{}{}/".format(indent, os.path.basename(root) or ".")
-        if not matches_patterns(os.path.relpath(root, startpath), patterns):
+        if not matches_patterns(os.path.relpath(root, startpath) + os.sep, patterns):
             print(line)
             file_content.append(line)
         subindent = " " * 4 * (level + 1)
@@ -47,7 +63,6 @@ def list_files(startpath, gitignore_path, output_file=None):
         with open(output_file, "w") as f:
             for line in file_content:
                 f.write(line + "\n")
-
 
 if __name__ == "__main__":
     directory = "."  # Use the current directory

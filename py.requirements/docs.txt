@@ -3,7 +3,7 @@
 # ============================================================================
 # REQUIRES: Python >= 3
 # DESCRIPTION:
-#    pip install -r ./src/python/py.requirements/docs.txt
+#    pip install -r ./py.requirements/docs.txt
 #
 # SEE ALSO:
 #  * http://packages.python.org/sphinxcontrib-programoutput/
@@ -12,7 +12,7 @@
 # ============================================================================
 
 # -- BEHAVE-RELATED:
--r ./src/python/py.requirements/basic.txt
+-r ./py.requirements/basic.txt
 
 sphinx >=2.0
 sphinx-autobuild

@@ -1,4 +1,13 @@
 repos:
+  - repo: local
+    hooks:
+      - id: imports
+        name: "Import Linter"
+        language: system
+        pass_filenames: false
+        entry: lint-imports
+        verbose: true
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.2.3
     hooks:
@@ -19,21 +28,4 @@ repos:
         language_version: python3.10
         args: ['-l', '80', '--check', '--diff']
         files: src/python/  # Ensure Black only checks the Python source directory
-
-  - repo: local
-    hooks:
-      - id: go_mod_tidy
-        name: "Go Mod Tidy"
-        entry: >
-          python -c "import subprocess; subprocess.run(['go', 'mod', 'tidy'], cwd='src/go')"
-        language: python
-        types: [go]
-
-  - repo: local
-    hooks:
-      - id: imports
-        name: "Import Linter"
-        entry: >
-          python -c "import subprocess; subprocess.run(['lint-imports'], cwd='src/python')"
-        language: python
-        types: [python]
+        verbose: true

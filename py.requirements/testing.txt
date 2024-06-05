@@ -3,10 +3,10 @@
 # ============================================================================
 # REQUIRES: Python >= 3
 # DESCRIPTION:
-#    pip install -r ./src/python/py.requirements/testing.txt
+#    pip install -r ./py.requirements/testing.txt
 # ============================================================================
 
--r ./src/python/py.requirements/basic.txt
+-r ./py.requirements/basic.txt
 assertpy >= 1.1
 
 # -- BEHAVE-RELATED:

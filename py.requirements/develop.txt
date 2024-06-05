@@ -3,14 +3,14 @@
 # ============================================================================
 # REQUIRES: Python >= 3
 # DESCRIPTION:
-#    pip install -r src/python/py.requirements/develop.txt
+#    pip install -r ./py.requirements/develop.txt
 # ============================================================================
 
 
 # -- DEPENDS ON:
--r ./src/python/py.requirements/basic.txt
--r ./src/python/py.requirements/docs.txt
--r ./src/python/py.requirements/testing.txt
+-r ./py.requirements/basic.txt
+-r ./py.requirements/docs.txt
+-r ./py.requirements/testing.txt
 black > 24.4
 coverage[toml]
 import-linter==2.0
